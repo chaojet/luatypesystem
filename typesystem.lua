@@ -37,6 +37,11 @@ function typeclass.__call(c, proto)	-- define class
 				else
 					c.ref[k] = v
 				end
+			--added by chaojet
+			--不确定云风为什么不把 function 也当作元类型中的 field 域,
+			--由于自己定义的类型中肯定需要用到 function
+			elseif vt == 'function' then
+				c.field[k] = v
 			else
 				error(string.format("Invalid field %s with type %s", k, vt))
 			end
@@ -103,6 +108,9 @@ local function new_object(self, ...)
 			end
 		end
 		obj._id = id
+		--added by chaojet
+		--如果不重置 _mark 标志，则使用缓存的对象并 delete 之后首次进行 collectgarbage 无法 release 这类对象
+		obj._mark = not mark_flag
 	else
 		obj = { owner = false , _mark = not mark_flag, _id = id, _ref = false }
 	end
@@ -200,6 +208,7 @@ local function unref_weak(obj, p)
 	for field in pairs(w) do
 		local refobj = obj[field]
 		if refobj and refobj._mark == mark_flag then
+			--chaojet, 弱引用置为 false 为了在 table 中留一个 slot,可以据此正确地识别元类型中存在的弱值域
 			obj[field] = false
 		end
 	end
