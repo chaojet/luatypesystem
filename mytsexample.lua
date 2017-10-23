@@ -22,9 +22,11 @@ local animal = {
 	a = false,
 }
 
+local metaAnimal = {__index=animal}
+
 local dog = {
 	_ctor = function(self, name, a)
-		setmetatable(self, {__index=animal})
+		setmetatable(self, metaAnimal)
 
 		self.super = animal
 
