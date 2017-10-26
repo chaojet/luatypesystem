@@ -251,7 +251,9 @@ local function next_type(c, lastobj)
 		if lastobj == nil then
 			return
 		end
-	until proxy[lastobj._ref] == c
+	--modified by chaojet
+	until proxy[lastobj._ref].type == c
+	--until proxy[lastobj._ref] == c
 	return lastobj
 end
 
