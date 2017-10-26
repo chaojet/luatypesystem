@@ -50,8 +50,6 @@ ts.dog(dog)
 local dogs = {}
 for i = 1, 3 do
 	table.insert(dogs, ts.dog:new('dog'..i, 100+i))
-	--在外部是无法访问 dogs 中对象里的当前属性(得到的都是“原型”里的默认值),
-	--如果需要访问，则必须在类型定义中提供 get 函数
 end
 for _, v in ipairs(dogs) do
 	v:update()
